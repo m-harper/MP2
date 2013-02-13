@@ -2,11 +2,14 @@
 
 all: dataserver simpleclient
 
-reqchannel.o: reqchannel.H reqchannel.C
-	g++ -c -g reqchannel.C
+reqchannel.o: reqchannel.h reqchannel.h
+	g++ -c -g reqchannel.c
 
-dataserver: dataserver.C reqchannel.o 
-	g++ -o dataserver dataserver.C reqchannel.o 
+dataserver: dataserver.c reqchannel.o 
+	g++ -o dataserver dataserver.c reqchannel.o 
 
-simpleclient: simpleclient.C reqchannel.o
-	g++ -o simpleclient simpleclient.C reqchannel.o
+simpleclient: simpleclient.c reqchannel.o
+	g++ -o simpleclient simpleclient.c reqchannel.o
+
+clean:
+	rm dataserver simpleclient *.o
