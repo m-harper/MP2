@@ -66,7 +66,6 @@ string int2string(int number) {
 /*--------------------------------------------------------------------------*/
 
 int main(int argc, char * argv[]) {
-	// First fork, load data server, THEN send requests
 
   cout << "CLIENT STARTED:\n" << flush;
 
@@ -95,6 +94,4 @@ int main(int argc, char * argv[]) {
   cout << "Reply to request 'quit' is '" << reply4 << endl;
 
   usleep(1000000);
-
-	// Before terminating, send a quit request and wait for a "bye" response
 }
