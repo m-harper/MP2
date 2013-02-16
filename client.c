@@ -62,6 +62,8 @@ int main(int argcs, char** argv) {
 			
 			string reply3 = chan.send_request("quit");
 			cout << "Reply to request 'quit' is '" << reply3 << endl;
+			
+			// Give the channel and dataserver time to close
 			usleep(1000000);
 			break;
 		}
