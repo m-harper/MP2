@@ -25,6 +25,10 @@
 #include <iostream>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <cstdlib>
+#include <cstring>
+#include <unistd.h>
+#include <pthread.h>
 
 #include <pthread.h>
 #include <errno.h>
