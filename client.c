@@ -1,6 +1,7 @@
 #include "reqchannel.h"
 #include "sstream"
 #include <cstdlib>
+#include <unistd.h>
 
 /*
 The client program (to be implemented as program client.C is to fork off a process, which is
@@ -33,6 +34,37 @@ int main(int argcs, char** argv) {
 	
 	if (run_mode) {
 		// Run forked
+		int pid = 0;
+		
+		pid = fork();
+		
+		switch (pid) {
+		case -1:
+			cerr << "Failed to fork\n";
+			exit(-1);
+			break;
+		case 0:
+			// This is a child process
+			// Start the data server
+			execv("dataserver", NULL);			
+			break;
+		default:
+			// This is the parent process
+			// Set up request channel
+			RequestChannel chan("control", RequestChannel::CLIENT_SIDE);
+			
+			// Send some requests
+			string reply1 = chan.send_request("hello");
+			cout << "Reply to request 'hello' is '" << reply1 << endl;
+
+			string reply2 = chan.send_request("data Joe Smith");
+			cout << "Reply to request 'data Joe Smith' is '" << reply2 << endl;
+			
+			string reply3 = chan.send_request("quit");
+			cout << "Reply to request 'quit' is '" << reply3 << endl;
+			usleep(1000000);
+			break;
+		}
 	}
 	else {
 		// Run locally
@@ -52,14 +84,7 @@ int main(int argcs, char** argv) {
 			exit(0);
 		}
 	}
-	// First fork
-	
-	// Exec dataserver
-	
-	// Send requests
-	
-	// Before terminating, send quit request and wait for bye
-	
+		
 	return 0;
 }
 
