@@ -2,6 +2,7 @@
 #include "sstream"
 #include <cstdlib>
 #include <unistd.h>
+#include <sys/time.h>
 
 /*
 The client program (to be implemented as program client.C is to fork off a process, which is
@@ -27,6 +28,12 @@ bool handle_args(int, char**);
 // Function for running locally
 string process_request(string);
 
+// Prints the elapsed time between two portions of code
+void print_time_diff(struct timeval * tp1, struct timeval * tp2);
+struct timeval tp_start; /* Used to compute elapsed time. */
+struct timeval tp_end;
+
+// Converts in integer into its string representation
 string int2string(int);
 
 int main(int argcs, char** argv) {
@@ -53,6 +60,9 @@ int main(int argcs, char** argv) {
 			// Set up request channel
 			RequestChannel chan("control", RequestChannel::CLIENT_SIDE);
 			
+			// Start timing
+			gettimeofday(&tp_start, 0);
+			
 			// Send some requests
 			string reply1 = chan.send_request("hello");
 			cout << "Reply to request 'hello' is '" << reply1 << endl;
@@ -63,6 +73,10 @@ int main(int argcs, char** argv) {
 			string reply3 = chan.send_request("quit");
 			cout << "Reply to request 'quit' is '" << reply3 << endl;
 			
+			// End timing
+			gettimeofday(&tp_end, 0);
+			print_time_diff(&tp_start, &tp_end);
+			
 			// Give the channel and dataserver time to close
 			usleep(1000000);
 			break;
@@ -71,6 +85,9 @@ int main(int argcs, char** argv) {
 	else {
 		// Run locally
 		string rep1, rep2, rep3;
+		
+		// Start timing
+		gettimeofday(&tp_start, 0);
 		
 		// Send a number of requests
 		rep1 = process_request("hello");
@@ -81,6 +98,10 @@ int main(int argcs, char** argv) {
 		
 		rep3 = process_request("quit");
 		cout << "Reply to request 'quit' is " << rep3 << endl;
+		
+		// End timing
+		gettimeofday(&tp_end, 0);
+		print_time_diff(&tp_start, &tp_end);
 				
 		if (rep3 == "bye") {
 			exit(0);
@@ -136,4 +157,18 @@ string int2string(int number) {
    stringstream ss;
    ss << number;
    return ss.str();
+}
+
+void print_time_diff(struct timeval * tp1, struct timeval * tp2) {
+  /* Prints to stdout the difference, in seconds and museconds, between two
+     timevals. */
+
+  long sec = tp2->tv_sec - tp1->tv_sec;
+  long musec = tp2->tv_usec - tp1->tv_usec;
+  if (musec < 0) {
+    musec += 1000000;
+    sec--;
+  }
+  printf(" [sec = %ld, musec = %ld] \n", sec, musec);
+
 }
