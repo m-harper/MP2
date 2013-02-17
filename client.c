@@ -65,17 +65,16 @@ int main(int argcs, char** argv) {
 			
 			// Send some requests
 			string reply1 = chan.send_request("hello");
-			cout << "Reply to request 'hello' is '" << reply1 << endl;
-
 			string reply2 = chan.send_request("data Joe Smith");
-			cout << "Reply to request 'data Joe Smith' is '" << reply2 << endl;
-			
 			string reply3 = chan.send_request("quit");
-			cout << "Reply to request 'quit' is '" << reply3 << endl;
 			
 			// End timing
 			gettimeofday(&tp_end, 0);
 			print_time_diff(&tp_start, &tp_end);
+			
+			cout << "Reply to request 'hello' is '" << reply1 << endl;
+			cout << "Reply to request 'data Joe Smith' is '" << reply2 << endl;
+			cout << "Reply to request 'quit' is '" << reply3 << endl;
 			
 			// Give the channel and dataserver time to close
 			usleep(1000000);
@@ -91,18 +90,17 @@ int main(int argcs, char** argv) {
 		
 		// Send a number of requests
 		rep1 = process_request("hello");
-		cout << "Reply to request 'hello' is " << rep1 << endl;
-		
 		rep2 = process_request("data Joe Smith");
-		cout << "Reply to request 'data Joe Smith' is " << rep2 << endl;
-		
 		rep3 = process_request("quit");
-		cout << "Reply to request 'quit' is " << rep3 << endl;
 		
 		// End timing
 		gettimeofday(&tp_end, 0);
 		print_time_diff(&tp_start, &tp_end);
-				
+		
+		cout << "Reply to request 'hello' is " << rep1 << endl;
+		cout << "Reply to request 'data Joe Smith' is " << rep2 << endl;
+		cout << "Reply to request 'quit' is " << rep3 << endl;
+		
 		if (rep3 == "bye") {
 			exit(0);
 		}
