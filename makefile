@@ -15,4 +15,4 @@ client: client.c reqchannel.o
 	g++ -o client client.c reqchannel.o
 
 clean:
-	rm dataserver simpleclient *.o
+	rm dataserver client *.o
